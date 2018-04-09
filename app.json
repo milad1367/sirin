@@ -1,0 +1,23 @@
+
+{
+  "expo": {
+   "name": "sirin",
+   "icon": "./sepila.png",
+   "version": "1.0.0",
+   "slug": "sirin",
+   "sdkVersion": "20.0.0",
+   "orientation" : "portrait",
+   "loading" : {
+    "icon" :"./img/sepila.png",
+    "backgroundColor" : "#aaa"
+   },
+   "ios": {
+     "bundleIdentifier": "com.sepila.sirin"
+   },
+   "android": {
+     "package": "com.sepila.sirin"
+   }
+
+   
+  }
+}
