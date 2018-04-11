@@ -61,34 +61,19 @@ import Svg,{
     //           console.log(responseJson);
     //         }
     //       }).catch((error) => {console.error(error)
-    //   });            
+    //   });
     // }
-    async componentDidMount(){
-      Font.loadAsync({
-        'Montserrat-Bold': require('../assets/fonts/MontserratAlternates-Bold.ttf'),
-        'Montserrat-Light' : require('../assets/fonts/MontserratAlternates-Regular.ttf'),
-      }).then(()=>{
-        this.setState({isFontLoaded : true});
-      });
+     componentDidMount(){
+
     }
-    async userInfo(){
-      try{
-          var value = await AsyncStorage.getItem("@user_info");
-          value = JSON.parse(value);
-          this.setState({userInfo : value});
-      }
-      catch(e){
-          console.log('caught error', e);
-          // Handle exceptions
-      }
-    }
+
     render(){
       const {isFontLoaded} = this.state;
       // console.log(this.state);
-      this.userInfo();
+    //  this.userInfo();
       return(
-        this.state.userInfo && 
-        <View style={{flex : 1}}>  
+        this.state.userInfo &&
+        <View style={{flex : 1}}>
             <LinearGradient  colors={['#514a9d','#24c6dc','#f7f7f7','#f7f7f7']} style={{flexDirection : 'column',borderRadius : 0,alignItems: 'stretch',flex:1,paddingTop : 30,paddingLeft:10,paddingRight:10,height : height , width : width }}>
               <Svg style={{zIndex : 0,position : 'absolute',top : height*.08}} width={width} height={height} viewBox={"0 0 " + 751 + " " + 1005}>
                 <G id="#f7f7f7ff">
@@ -153,11 +138,11 @@ import Svg,{
                   </View> */}
                 </View>
               </View>
-          </LinearGradient> 
+          </LinearGradient>
         </View>
         )
       }
-  } 
+  }
   const styles = {
       menuContainer : {
         flexDirection : 'row',
@@ -165,4 +150,3 @@ import Svg,{
         backgroundColor:'transparent',
       }
   }
-  

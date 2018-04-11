@@ -7,8 +7,8 @@ export default class CircularProgressBar extends Component {
     constructor(){
         super();
         state={
-            progressSteps:  0,
-            progressCoin: 0,
+            progressSteps : {},
+            progressCoin : {},
             isFontLoaded : false
         }
     }
@@ -43,11 +43,11 @@ export default class CircularProgressBar extends Component {
     }
     componentWillMount() {
         this.setState({
-            progressSteps: 0,
-            progressCoin:0,
-            progress : 0,
-            steps : 0,
-            coins : 0
+          progressSteps: 0,
+          progressCoin:0,
+          progress : 0,
+          steps : 0,
+          coins : 0
         });
     }
 
@@ -56,12 +56,12 @@ export default class CircularProgressBar extends Component {
     //    console.log(this.state);
     //    console.log(this.props.coins);
         const window = Dimensions.get('window');
-        if(this.props.progressSteps >= 0){
+        if(this.state.progressSteps > 0){
             return(
                 <Text style={[{color:'white',fontSize:Math.round(window.height/30)},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>{Number((this.state.progressSteps).toFixed(3))} km</Text>
             )
         }
-        if(this.props.progressCoin >=0){
+        if(this.state.progressCoin > 0){
             return(
                 <Text style={[{color:'white',fontSize:Math.round(window.height/40),textAlign :"center"},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}> Remain to get {"\n"} Your share </Text>
                 // {Number((this.state.progressCoin).toFixed(1))*10*5}
@@ -72,8 +72,8 @@ export default class CircularProgressBar extends Component {
         const {isFontLoaded} = this.state;
         // console.log(this.props.details)
         const window = Dimensions.get('window');
-      //  console.log("this.state"+this.state.progressSteps);
-      //  console.log("this.props"+this.props.progressSteps);
+        console.log("this.state"+this.state.progressSteps);
+        console.log("this.props"+this.props.progressSteps);
         // this.setState({progressSteps : this.props.progressSteps})
         // console.log(this.state)
         return(
@@ -91,7 +91,7 @@ export default class CircularProgressBar extends Component {
                     progress={this.state.progress} 
                     thickness={5} 
                     formatText={()=>{
-                        if(this.state.steps >= 0){
+                        if(this.state.steps > 0){
                             return this.state.steps + "\n" + "steps"
                         }
                         else if(this.state.coins){

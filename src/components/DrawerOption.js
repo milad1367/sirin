@@ -14,7 +14,7 @@ const DrawerOption = DrawerNavigator(
     {
         Start : {
         path : '/',
-        screen : Start
+        screen : MainPage
       },
         Home : {
           path : '/mainpage',

@@ -14,6 +14,8 @@ import DateValue from '../actions';
 import Toast from 'react-native-simple-toast';
 import DatePicker from 'react-native-datepicker';
 import { StackNavigator } from 'react-navigation';
+import MainPage from './MainPage';
+
 import Svg,{
     Circle,
     Ellipse,
@@ -37,8 +39,8 @@ class Start extends Component {
   static navigationOptions = {
     header : null,
     drawerLockMode: 'locked-closed'
-  } 
-  
+  }
+
   constructor(props){
     super(props);
     this.state={
@@ -79,7 +81,7 @@ class Start extends Component {
     this.animatedOpacityLogin = new Animated.Value(0);
     this.animatedOpacitySignUp = new Animated.Value(0);
     this.setState({interactionsComplete: false});
-  }  
+  }
   async componentDidMount(){
     const window = Dimensions.get('window');
     var interval = await setInterval(()=>{
@@ -87,12 +89,6 @@ class Start extends Component {
       clearInterval(interval);
     },2000)
     InteractionManager.runAfterInteractions(() => {
-      Font.loadAsync({
-        'Montserrat-Bold': require('../assets/fonts/MontserratAlternates-Bold.ttf'),
-        'Montserrat-Light' : require('../assets/fonts/MontserratAlternates-Regular.ttf'),
-      }).then(()=>{
-        this.setState({isFontLoaded : true})
-      });
       this.setState({
         SliderStyle : null,
         sliderPosition : 0,
@@ -142,6 +138,8 @@ class Start extends Component {
   }
   _LoginForm(){
     const { navigate } = this.props.navigation;
+    navigate('MainPage',{'ProgressSteps':1});
+
     const window = Dimensions.get('window');
     var handleLogin = InteractionManager.createInteractionHandle();
     this.setState({sliderPosition : window.height*0.05});
@@ -158,12 +156,12 @@ class Start extends Component {
     });
     InteractionManager.clearInteractionHandle(handleLogin);
     this.setState({colors : ['#514a9d','#24c6dc',"#fff"],loginForm : true , SignUpForm : false,SliderStyle : false,forgotForm:false})
-    
+
   }
   _SignUpForm(){
 
     const { navigate } = this.props.navigation;
-    
+
     const window = Dimensions.get('window');
     var handleSignUp = InteractionManager.createInteractionHandle();
     InteractionManager.runAfterInteractions(() => {
@@ -182,16 +180,19 @@ class Start extends Component {
   }
   LoginFetch(){
     const { navigate } = this.props.navigation;
+    navigate('MainPageStates');
+
     let phoneNumber = this.state.CountryLogin + this.state.phoneNumberLogin;
     let password = this.state.passwordLogin;
     let log = '';
+
     if (phoneNumber.length > 0 && phoneNumber.length < 12){
       log += 'phone number is not valid';
     }
     if(password.length > 0 && password.length < 7){
       if(log.length > 0)
       log += '\npassword must be at least 6 characters';
-      else 
+      else
       log += 'password must be at least 6 characters';
     }
     if(!log.length > 0){
@@ -224,7 +225,7 @@ class Start extends Component {
               }
               user = await JSON.stringify(user);
               await AsyncStorage.setItem('@user_info',user).then(()=>{
-                console.log(user);
+
               });
               navigate('MainPageStates');
               this.setState({isLoginLoading : false});
@@ -234,7 +235,7 @@ class Start extends Component {
                for( var i = 0 ; i< responseJson.data.length ; i ++ ){
                  massagelog += responseJson.data[i].msg;
                }
-                this.setState({isLoginLoading : false}); 
+                this.setState({isLoginLoading : false});
                 Alert.alert("ERROR!",massagelog);
               }
               else{
@@ -243,12 +244,12 @@ class Start extends Component {
               }
             }).catch((error) => {
                 console.error(error);
-            });            
+            });
     }
     if(log.length > 0){
       Alert.alert("ERROR!",log);
     }
-    
+
     if(log.length > 0){
       Alert.alert("ERROR!",log);
     }
@@ -273,7 +274,7 @@ class Start extends Component {
             phone : phoneNumber,
             email,
             code
-          })  
+          })
         }).then((response) => response.json()).then( async (responseJson) => {
           if(responseJson.status == 'ok'){
             let age = parseInt((new Date() - new Date(responseJson.user.birthDate)) / 31536000000);
@@ -291,8 +292,7 @@ class Start extends Component {
             }
             user = await JSON.stringify(user);
             AsyncStorage.setItem('@user_info',user).then(()=>{
-              console.log("user info added");
-              console.log(user);
+
               navigate('MainPageStates');
             });
             this.setState({isCodeLoading : false});
@@ -301,7 +301,7 @@ class Start extends Component {
               massagelog = '';
              for( var i = 0 ; i< responseJson.data.length ; i ++ ){
                massagelog += responseJson.data[i].msg;
-             } 
+             }
               this.setState({isCodeLoading : false});
               Alert.alert("ERROR!",massagelog);
             }
@@ -326,14 +326,14 @@ class Start extends Component {
         },
         body:JSON.stringify({
             email,
-          })  
+          })
         }).then((response) => response.json()).then((responseJson) => {
             if(responseJson.status == 'ok'){
               massagelog = '';
               for( var i = 0 ; i< responseJson.data.length ; i ++ ){
                 massagelog += responseJson.data[i].msg;
               }
-              this.setState({isForgotLoading : false}); 
+              this.setState({isForgotLoading : false});
               Alert.alert("SUCCESS!",massagelog);
             }
             else if(responseJson.status == 'error'){
@@ -341,11 +341,11 @@ class Start extends Component {
              for( var i = 0 ; i< responseJson.data.length ; i ++ ){
                massagelog += responseJson.data[i].msg;
              }
-              this.setState({isForgotLoading : false});  
+              this.setState({isForgotLoading : false});
               Alert.alert("ERROR!",massagelog);
             }
             else{
-              this.setState({isForgotLoading : false}); 
+              this.setState({isForgotLoading : false});
               Alert.alert("ERROR!",'somthing has went wrong plz try later');
             }
           }).catch((error) => {
@@ -370,12 +370,12 @@ class Start extends Component {
       if(log.length > 0)
       log += '\netherium account number is not valid';
       else
-      log += 'etherium account number is not valid';      
+      log += 'etherium account number is not valid';
     }
     if(password.length > 0 && password.length < 7){
       if(log.length > 0)
       log += '\npassword must be at least 6 characters';
-      else 
+      else
       log += 'password must be at least 6 characters';
     }
     if(!log.length > 0){
@@ -395,7 +395,6 @@ class Start extends Component {
             etheriumAccount
           })
         }).then((response) => response.json()).then(async (responseJson) => {
-            console.log(responseJson);
             if(responseJson.status == 'ok'){
               this.setState({isSignUpLoading : false});
               this.setState({code : responseJson.code});
@@ -406,7 +405,7 @@ class Start extends Component {
               massagelog = '';
              for( var i = 0 ; i< responseJson.data.length ; i ++ ){
                massagelog += responseJson.data[i].msg;
-             } 
+             }
               this.setState({isSignUpLoading : false});
               Alert.alert("ERROR!",massagelog);
             }
@@ -416,7 +415,7 @@ class Start extends Component {
             }
           }).catch((error) => {
               console.error(error);
-            });                
+            });
         }
     else{
       this.setState({isSignUpLoading : false});
@@ -438,11 +437,11 @@ class Start extends Component {
         var submitLoginButtion = <TouchableOpacity disabled={this.state.passwordLogin.length <=0 || this.state.phoneNumberLogin.length <= 0} style={[{flex : 1}]} onPress={this.LoginFetch.bind(this)}>
         <LinearGradientButton width={window.width / 4}  detail="Login"/>
       </TouchableOpacity>
-      }    
+      }
       return(
         <Animated.View style={[styles.formContent,{flex : 1.5,opacity : this.animatedOpacityLogin,justifyContent : 'center',alignItems : 'center'}]}>
          <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
-            <Text style={[{fontSize : window.width*.08,color : '#514a9d'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>Welcome Back</Text>
+            <Text style={[{fontSize : window.width*.08,color : '#514a9d'}]}>Welcome Back</Text>
          </View>
           <View style={{flex : 3,alignItems : 'center',justifyContent : 'center',alignItems : 'center'}}>
             <View style={{flex : 1 , flexDirection : 'row',width : window.width - 30,marginLeft : 5}}>
@@ -452,7 +451,7 @@ class Start extends Component {
                       onValueChange={(itemValue, itemIndex) => this.setState({CountryLogin: itemValue})}>
                       {sorted.map((phone,index)=>{
                         return(
-                          <Picker.Item key={index} label={ phone.country + " " + phone.code } value={phone.code} />    
+                          <Picker.Item key={index} label={ phone.country + " " + phone.code } value={phone.code} />
                         )
                       })}
                     </Picker>
@@ -461,11 +460,11 @@ class Start extends Component {
                     </View>
                 </View>
                 <View style={{flex : 1.2}}>
-                  <TextInput  underlineColorAndroid={'#24c6dc'} placeholder={'phone number'} value={this.state.phoneNumberLogin} onChangeText={(phoneNumberLogin)=>{this.setState({phoneNumberLogin})}} keyboardType={'phone-pad'}  style={[{color:'#908cbb',padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+                  <TextInput  underlineColorAndroid={'#24c6dc'} placeholder={'phone number'} value={this.state.phoneNumberLogin} onChangeText={(phoneNumberLogin)=>{this.setState({phoneNumberLogin})}} keyboardType={'phone-pad'}  style={[{color:'#908cbb',padding : 10}]}/>
                 </View>
             </View>
             <View style={{flex : 1}}>
-            <TextInput underlineColorAndroid={'#24c6dc'} value={this.state.passwordLogin} onChangeText={(passwordLogin)=>{this.setState({passwordLogin})}} secureTextEntry={true} placeholder={'password'} style={[{color:'#908cbb',width : window.width - 30,padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+            <TextInput underlineColorAndroid={'#24c6dc'} value={this.state.passwordLogin} onChangeText={(passwordLogin)=>{this.setState({passwordLogin})}} secureTextEntry={true} placeholder={'password'} style={[{color:'#908cbb',width : window.width - 30,padding : 10}]}/>
             </View>
           </View>
           <View style={{flex : 2,justifyContent : 'center',alignItems : 'center',opacity : buttonOpacity}}>
@@ -474,12 +473,12 @@ class Start extends Component {
           <View style={{flex : 1,flexDirection : 'row',justifyContent : 'center'}}>
             <View style={{flex : 1,justifyContent : 'center',alignItems : 'flex-start'}}>
               <TouchableOpacity onPress={this._SignUpForm = this._SignUpForm.bind(this)}>
-                  <Text style={[{fontSize : 15,color : '#514a9d',textAlign : 'center'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>don't have an account?</Text>
+                  <Text style={[{fontSize : 15,color : '#514a9d',textAlign : 'center'}]}>don't have an account?</Text>
               </TouchableOpacity>
             </View>
             <View style={{flex : 1,justifyContent : 'center',alignItems : 'flex-end'}}>
               <TouchableOpacity onPress={this._forgotPassword = this._forgotPassword.bind(this)}>
-                  <Text style={[{fontSize : 15,color : '#514a9d',textAlign : 'center'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>forgot Your Password ? </Text>
+                  <Text style={[{fontSize : 15,color : '#514a9d',textAlign : 'center'}]}>forgot Your Password ? </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -494,15 +493,15 @@ class Start extends Component {
         var submitForgotButtion = <TouchableOpacity style={[{flex : 1}]} onPress={this.forgotPasswordFetch.bind(this)}>
              <LinearGradientButton width={window.width / 4}  detail="Send"/>
            </TouchableOpacity>
-      }    
+      }
       return(
         <Animated.View style={[styles.formContent,{flex : 1,opacity : this.animatedOpacityLogin,justifyContent : 'center',alignItems : 'center'}]}>
         <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
-           <Text style={[{fontSize : window.width*.06,color : '#514a9d'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>Plz Enter Your Email</Text>
+           <Text style={[{fontSize : window.width*.06,color : '#514a9d'}]}>Plz Enter Your Email</Text>
         </View>
          <View style={{flex : 1,alignItems : 'center',justifyContent : 'center',alignItems : 'center'}}>
            <View style={{flex : 1}}>
-           <TextInput  underlineColorAndroid={'#24c6dc'} placeholder={'email'} value={this.state.emailForgot} onChangeText={(emailForgot)=>{this.setState({emailForgot})}} style={[{color:'#908cbb',width : window.width - 30,padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+           <TextInput  underlineColorAndroid={'#24c6dc'} placeholder={'email'} value={this.state.emailForgot} onChangeText={(emailForgot)=>{this.setState({emailForgot})}} style={[{color:'#908cbb',width : window.width - 30,padding : 10}]}/>
            </View>
          </View>
          <View style={{flex : 2,justifyContent : 'center',alignItems : 'center',opacity : buttonOpacity}}>
@@ -510,8 +509,8 @@ class Start extends Component {
          </View>
          <View style={{flex : 1,justifyContent : 'center'}}>
             <TouchableOpacity style={[{flex : 1}]} onPress={this._LoginForm = this._LoginForm.bind(this)}>
-              <Text style={[{fontSize : window.width*.025,color : '#514a9d',textAlign : 'center'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>didn't forget your password ? </Text>
-            </TouchableOpacity>  
+              <Text style={[{fontSize : window.width*.025,color : '#514a9d',textAlign : 'center'}]}>didn't forget your password ? </Text>
+            </TouchableOpacity>
          </View>
        </Animated.View>
       )
@@ -522,12 +521,7 @@ class Start extends Component {
       else
       var buttonOpacity = 0.2;
 
-      if(this.state.isFontLoaded){
-        var font = 'Montserrat-Bold';
-      }
-      else{
-        var font = 'sans-serif';
-      }
+
       if(this.state.isDatePicketed){
         var color = "#908cbb";
       }
@@ -541,11 +535,11 @@ class Start extends Component {
         var submitSignUpButtion = <TouchableOpacity  disabled={this.state.etheriumAccount.length <=0 || this.state.passwordSignUp.length <=0 || this.state.emailSignUp.length <=0 || this.state.phoneNumberSignUp.length <=0 || this.state.userNameSignUp.length<=0 || this.state.etheriumAccount.length <=0 }  onPress={this.SignUpFetch.bind(this)} style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
               <LinearGradientButton width={window.width / 4} detail="signup"/>
             </TouchableOpacity>
-      }      
+      }
       return(
         <Animated.View style={[{flex : 2.5,opacity:this.animatedOpacitySignUp}]}>
           <View style={{flex : 2,justifyContent : 'center',alignItems : 'center'}}>
-            <Text style={[{fontSize : window.width*.08,color : '#514a9d'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>Welcome</Text>
+            <Text style={[{fontSize : window.width*.08,color : '#514a9d'}]}>Welcome</Text>
           </View>
           <View style={{flex : 9.5,justifyContent : 'center',alignItems : 'center'}}>
             <View style={{flex : 1,width : window.width - 35,flexDirection : 'row',justifyContent : 'center',alignItems : 'center'}}>
@@ -555,7 +549,7 @@ class Start extends Component {
                     onValueChange={(itemValue, itemIndex) => this.setState({Country: itemValue})}>
                     {sorted.map((phone,index)=>{
                         return(
-                          <Picker.Item key={index} label={ phone.country + " " + phone.code } value={phone.code} />    
+                          <Picker.Item key={index} label={ phone.country + " " + phone.code } value={phone.code} />
                         )
                     })}
                   </Picker>
@@ -564,19 +558,19 @@ class Start extends Component {
                   </View>
               </View>
               <View style={{flex : 1.2}}>
-                <TextInput onChangeText={(phoneNumberSignUp)=>{this.setState({phoneNumberSignUp})}} value={this.state.phoneNumberSignUp} underlineColorAndroid={'#24c6dc'} placeholder={'phone number'} keyboardType={'phone-pad'} style={[{color:'#908cbb',padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+                <TextInput onChangeText={(phoneNumberSignUp)=>{this.setState({phoneNumberSignUp})}} value={this.state.phoneNumberSignUp} underlineColorAndroid={'#24c6dc'} placeholder={'phone number'} keyboardType={'phone-pad'} style={[{color:'#908cbb',padding : 10}]}/>
               </View>
-            </View> 
+            </View>
             <View style={{flex : 1,flexDirection : 'row',justifyContent : 'center',alignItems : 'center',width : window.width - 30}}>
               <View style={{flex : 1}}>
-                <TextInput underlineColorAndroid={'#24c6dc'} placeholder={'name'} onChangeText={(userNameSignUp)=>{this.setState({userNameSignUp})}} value={this.state.userNameSignUp}   style={[{color:'#908cbb',padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+                <TextInput underlineColorAndroid={'#24c6dc'} placeholder={'name'} onChangeText={(userNameSignUp)=>{this.setState({userNameSignUp})}} value={this.state.userNameSignUp}   style={[{color:'#908cbb',padding : 10}]}/>
               </View>
               <View style={{flex : 1.2}}>
-                <TextInput underlineColorAndroid={'#24c6dc'} placeholder={'email'} onChangeText={(emailSignUp)=>{this.setState({emailSignUp})}} value={this.state.emailSignUp} style={[{color:'#908cbb',padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+                <TextInput underlineColorAndroid={'#24c6dc'} placeholder={'email'} onChangeText={(emailSignUp)=>{this.setState({emailSignUp})}} value={this.state.emailSignUp} style={[{color:'#908cbb',padding : 10}]}/>
               </View>
             </View>
             <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
-              <TextInput underlineColorAndroid={'#24c6dc'} placeholder={'etherium account number'} onChangeText={(etheriumAccount)=>{this.setState({etheriumAccount})}} value={this.state.etheriumAccount} style={[{color:'#908cbb',width : window.width - 30,padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+              <TextInput underlineColorAndroid={'#24c6dc'} placeholder={'etherium account number'} onChangeText={(etheriumAccount)=>{this.setState({etheriumAccount})}} value={this.state.etheriumAccount} style={[{color:'#908cbb',width : window.width - 30,padding : 10}]}/>
             </View>
             <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
               <View style={{left : - window.width /2.4,padding : 0}}>
@@ -618,7 +612,7 @@ class Start extends Component {
               </View>
             </View>
             <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
-              <TextInput underlineColorAndroid={'#24c6dc'} secureTextEntry={true} placeholder={'password'} onChangeText={(passwordSignUp)=>{this.setState({passwordSignUp})}} value={this.state.passwordSignUp} style={[{color:'#908cbb',width : window.width - 30,padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+              <TextInput underlineColorAndroid={'#24c6dc'} secureTextEntry={true} placeholder={'password'} onChangeText={(passwordSignUp)=>{this.setState({passwordSignUp})}} value={this.state.passwordSignUp} style={[{color:'#908cbb',width : window.width - 30,padding : 10}]}/>
             </View>
           </View>
           <View style={{flex : 2,justifyContent : 'center',alignItems : 'center',opacity : buttonOpacity}}>
@@ -626,8 +620,8 @@ class Start extends Component {
           </View>
           <View style={{flex : 2,justifyContent : 'center'}}>
             <TouchableOpacity onPress={this._LoginForm = this._LoginForm.bind(this)}>
-                <Text style={[{fontSize : 15,color : '#514a9d',textAlign : 'center'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>Have an account?</Text>   
-            </TouchableOpacity>        
+                <Text style={[{fontSize : 15,color : '#514a9d',textAlign : 'center'}]}>Have an account?</Text>
+            </TouchableOpacity>
           </View>
         </Animated.View>
       )
@@ -640,15 +634,15 @@ class Start extends Component {
         var submitCodeButtion =  <TouchableOpacity style={[{flex : 1}]} onPress={this.CodeFetch.bind(this)}>
              <LinearGradientButton width={window.width / 4}  detail="Send"/>
            </TouchableOpacity>
-      }      
+      }
       return(
         <Animated.View style={[styles.formContent,{flex : 1,opacity : this.animatedOpacityLogin,justifyContent : 'center',alignItems : 'center'}]}>
         <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
-           <Text style={[{fontSize : window.width*.04,color : '#514a9d'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>Plz Send Us Your Code</Text>
+           <Text style={[{fontSize : window.width*.04,color : '#514a9d'}]}>Plz Send Us Your Code</Text>
         </View>
          <View style={{flex : 1,alignItems : 'center',justifyContent : 'center',alignItems : 'center'}}>
            <View style={{flex : 1}}>
-           <TextInput  underlineColorAndroid={'#24c6dc'} placeholder={'code'} value={this.state.phoneCode} onChangeText={(phoneCode)=>{this.setState({phoneCode})}} keyboardType={'phone-pad'}  style={[{color:'#908cbb',width : window.width - 30,padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+           <TextInput  underlineColorAndroid={'#24c6dc'} placeholder={'code'} value={this.state.phoneCode} onChangeText={(phoneCode)=>{this.setState({phoneCode})}} keyboardType={'phone-pad'}  style={[{color:'#908cbb',width : window.width - 30,padding : 10}]}/>
            </View>
          </View>
          <View style={{flex : 2,justifyContent : 'center',alignItems : 'center',opacity : buttonOpacity}}>
@@ -662,8 +656,8 @@ class Start extends Component {
       <View style={styles.formContent}>
         <TouchableOpacity onPress={this._LoginForm = this._LoginForm.bind(this)}>
           <LinearGradientButton width={window.width/3} detail="login"/>
-        </TouchableOpacity>  
-        <Text style={[{fontSize :window.width/15,color : '#6572b2'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>
+        </TouchableOpacity>
+        <Text style={[{fontSize :window.width/15,color : '#6572b2'}]}>
           Or
         </Text>
         <TouchableOpacity onPress={this._SignUpForm = this._SignUpForm.bind(this)}>
@@ -673,8 +667,7 @@ class Start extends Component {
     )
   }
   render() {
-     
-    console.log(sorted)
+
     const menuToolbar = ['menu','History','back'];
     const window = Dimensions.get('window');
     const { navigate } = this.props.navigation;
@@ -698,11 +691,11 @@ class Start extends Component {
             <Path fill="#fff" opacity="0.45" d=" M 32.89 80.04 C 37.27 78.69 41.52 76.90 46.01 75.96 C 40.82 78.10 35.49 79.88 30.18 81.65 C 30.92 80.88 31.83 80.27 32.89 80.04 Z" />
             </G>
           </Svg>
-          </Animated.View>  
+          </Animated.View>
           <View style={{flex: 2}}>
             <Slider height={this.state.sliderPosition} text={this.state.SliderStyle}/>
           </View>
-          {this.View}  
+          {this.View}
         </LinearGradient>
       </KeyboardAvoidingView>
     </ScrollView>

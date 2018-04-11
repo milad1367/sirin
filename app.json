@@ -8,7 +8,7 @@
    "sdkVersion": "20.0.0",
    "orientation" : "portrait",
    "loading" : {
-    "icon" :"./img/sepila.png",
+    "icon" :"./sepila.png",
     "backgroundColor" : "#aaa"
    },
    "ios": {
