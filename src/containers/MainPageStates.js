@@ -9,11 +9,11 @@ import MyLocation from './MyLocation';
 import AntiHack from './AntiHack';
 
 mapStateToProps = ( state ) => ({
-    //ProgressSteps : state.FinalSteps.RealSteps
-    ProgressSteps : 1
+   // ProgressSteps : state.FinalSteps.RealSteps
+   ProgressSteps : state.steps
 })
  const MainPageStates = connect(
     mapStateToProps
 )(MainPage)
 
-export default MainPageStates
+export default MainPageStates 

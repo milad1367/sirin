@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text,View,Image,StyleSheet,Dimensions,TouchableOpacity,AsyncStorage,BackHandler } from 'react-native';
+import {Text,View,Image,StyleSheet,Dimensions,TouchableOpacity } from 'react-native';
 import { LinearGradient, Font } from 'expo';
 import History from './history';
 import Profile from './ProfileEdit';
@@ -23,57 +23,28 @@ import Svg,{
     Defs,
     Stop
   } from 'react-native-svg';
+
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
   export default class Sidemenu extends Component {
     static navigationOptions = {
       header : null
+    } 
+    state = {
+      isFontLoaded : false
     }
-    constructor(){
-      super();
-      this.state = {
-        isFontLoaded : false,
-        userInfo : null
-      }
+    componentDidMount(){
+      Font.loadAsync({
+        'Montserrat-Bold': require('../assets/fonts/MontserratAlternates-Bold.ttf'),
+        'Montserrat-Light' : require('../assets/fonts/MontserratAlternates-Regular.ttf'),
+      }).then(()=>{
+        this.setState({isFontLoaded : true});
+      });
     }
-    // async _SignOut(){
-    //   // await AsyncStorage.clear();
-    //   // this.setState({userInfo : null});
-    //   // this.props.navigation.navigate('Start');
-    //   // console.log("deleted");
-    //   // console.log(this.state.userInfo.token);
-    //   fetch('https://sirin-app.herokuapp.com/user/logout', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body:JSON.stringify({token : this.state.userInfo.token})
-    //       }).then((response) => response.json()).then(async(responseJson) => {
-    //         console.log(responseJson);
-    //         if(responseJson.status == 'ok'){
-    //           await AsyncStorage.clear();
-    //           this.setState({userInfo : null});
-    //           this.props.navigation.navigate('Start');
-    //           console.log("deleted");
-    //         }
-    //         else{
-    //           console.log(responseJson);
-    //         }
-    //       }).catch((error) => {console.error(error)
-    //   });
-    // }
-     componentDidMount(){
-
-    }
-
     render(){
       const {isFontLoaded} = this.state;
-      // console.log(this.state);
-    //  this.userInfo();
       return(
-        this.state.userInfo &&
-        <View style={{flex : 1}}>
+        <View style={{flex : 1}}>  
             <LinearGradient  colors={['#514a9d','#24c6dc','#f7f7f7','#f7f7f7']} style={{flexDirection : 'column',borderRadius : 0,alignItems: 'stretch',flex:1,paddingTop : 30,paddingLeft:10,paddingRight:10,height : height , width : width }}>
               <Svg style={{zIndex : 0,position : 'absolute',top : height*.08}} width={width} height={height} viewBox={"0 0 " + 751 + " " + 1005}>
                 <G id="#f7f7f7ff">
@@ -88,8 +59,8 @@ import Svg,{
               </Svg>
               <View style={{flex : 1,justifyContent : 'center'}}>
                 <View style={[styles.menuContainer,{alignItems : 'flex-start'}]}>
-                    <Image source={{uri : this.state.userInfo.image }} style={{height : width/5 , width : width/5,borderRadius : 75,margin : 15}}/>
-                    <Text style={[{color : '#fff',textAlign : 'left',fontSize : 15,marginTop : 35}, isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>{this.state.userInfo.name} {"\n"} {this.state.userInfo.age} years old</Text>
+                    <Image source={require('../imgs/me.png')} style={{height : width/5 , width : width/5,borderRadius : 75,margin : 15}}/>
+                    <Text style={[{color : '#fff',textAlign : 'left',fontSize : 15,marginTop : 35}, isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>milad asghari {"\n"} 30 years old</Text>
                 </View>
               </View>
               <View style={{flex : 3,justifyContent:'center',marginTop : 120}}>
@@ -129,20 +100,20 @@ import Svg,{
                       </View>
                     </TouchableOpacity>
                   </View>
-                  {/* <View style={{flex : 1,marginTop : 20}}>
-                    <TouchableOpacity onPress={this._SignOut = this._SignOut.bind(this)}>
+                  <View style={{flex : 1,marginTop : 20}}>
+                    <TouchableOpacity onPress={()=>this.props.navigation.navigate('Start')}>
                       <View style={styles.menuContainer}>
                           <Text style={[{color : '#4c80b9',textAlign : 'left',fontSize : 18},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Sign Out</Text>
                       </View>
                     </TouchableOpacity>
-                  </View> */}
+                  </View>
                 </View>
               </View>
-          </LinearGradient>
+          </LinearGradient> 
         </View>
         )
       }
-  }
+  } 
   const styles = {
       menuContainer : {
         flexDirection : 'row',
@@ -150,3 +121,4 @@ import Svg,{
         backgroundColor:'transparent',
       }
   }
+  

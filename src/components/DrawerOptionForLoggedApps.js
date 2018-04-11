@@ -42,7 +42,7 @@ const DrawerOptionForLoggedApps = DrawerNavigator(
         }
     },
     {
-        initialRouteName : 'Home',
+        initialRouteName : 'Start',
         drawerPosition : 'left',
         contentComponent : props => <SideMenu {...props}/>,
         contentOptions: {

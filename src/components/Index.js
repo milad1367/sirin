@@ -32,7 +32,7 @@ class  Index extends Component{
   }
   async componentDidMount(){
      await reactNative.I18nManager.allowRTL(false);
-
+    
   }
 
   componentWillMount(){
@@ -48,16 +48,28 @@ class  Index extends Component{
 
   }
   render(){
-
-
+    
+   //   if(this.state.userInfo){
+        return(
+        <View style={styles.container}>
+          <GetPedometer />
+          <MyLocation />
+          <AntiHack />
+          <DrawerOptionForLoggedApps/>
+        </View>
+        )
+     // }
+      /*
+      else{
         return(
           <View style={styles.container}>
 
             <DrawerOption/>
           </View>
         )
-
-  }
+    }
+    */
+  } 
 }
 export default Index
 

@@ -120,6 +120,7 @@ class History extends Component {
                     </View>
                     <ScrollView style={styles.ScrollView}>
                     {this.state.histories.map(history => <LinearGradient
+                    key = {history.date.toString()}
                     start={[0.1,0.4]}
                     end={[0.5,0.4]}
                     colors={['rgba(191, 199, 242,0.8)','rgba(191, 199, 242,0.8)']}

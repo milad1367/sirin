@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import {Alert,ActivityIndicator,AsyncStorage,Text,View,Image,StyleSheet,Dimensions,TouchableOpacity,Animated,TextInput,KeyboardAvoidingView,ScrollView} from 'react-native';
+import {Text,View,Image,StyleSheet,Dimensions,TouchableOpacity,Animated,TextInput,KeyboardAvoidingView,ScrollView} from 'react-native';
 import { SideMenu } from 'react-native-elements'
 import { LinearGradient , Font} from 'expo';
 import ToolBar from './Toolbar';
 import {BoxShadow} from 'react-native-shadow';
 import LinearGradientButton from './LinearGradientButton';
-import DatePicker from 'react-native-datepicker';
+import { Linking } from 'react-native';
+
 import Svg,{
   Circle,
   Ellipse,
@@ -30,346 +31,180 @@ class Profile extends Component {
 constructor () {
     super()
     this.state = {
-      isOpen: false,
-      isFontLoaded : false,
-      isEdit : false,
-      userInfo : false,
-      isDatePicketed : false,
-      date : '',
-      isUpdateLoading : false,
-      Name : '',
-      PhoneNumber : '',
-      isEtheriumAccountChanged : false,
-      isNameChanged : false,
-      isPasswordChanged : false,
-      isPhoneNumberChanged : false,
-      EtheriumAccount : '',
-      Password : '',
-      isSignOutLoading : false
+    isOpen: false,
+    isFontLoaded : false
     }
-
+    this.toggleSideMenu = this.toggleSideMenu.bind(this)
 }
-  async componentDidMount(){
-    await Font.loadAsync({
+  componentDidMount(){
+    Font.loadAsync({
       'Montserrat-Bold': require('../assets/fonts/MontserratAlternates-Bold.ttf'),
       'Montserrat-Light' : require('../assets/fonts/MontserratAlternates-Regular.ttf'),
     }).then(()=>{
       this.setState({isFontLoaded : true});
     });
+    this.setState({width : 0});
     this.setState({isEdit : false})
-    try{
-      var value = await AsyncStorage.getItem("@user_info");
-      value = JSON.parse(value);
-      this.setState({userInfo : value});
-    }
-    catch(e){
-      console.log('caught error', e);
-      // Handle exceptions
-    }
-    this.setState({date : this.state.userInfo.birthDate});
+    this.setState({borderColor : 'transparent',borderWidth : 0}) 
+    this.setState({borderRadius : 0, top: 0 , left : 0,isOpen : false})
+  }
+  componentWillMount(){
+    this.animatedPositionTop = new Animated.Value(0);
+    this.animatedPositionLeft = new Animated.Value(0);
+    this.setState({width : 0});
+    this.setState({isEdit : false}) 
+    this.setState({borderColor : 'transparent',borderWidth : 0})
+    this.setState({borderRadius : 0,top : 0 , left : 0,isOpen : false})
+  }
+  onSideMenuChange (isOpen) {
+    this.setState({
+      isOpen: isOpen
+    })
+  }
+  
+  toggleSideMenu () {
+    this.setState({
+      isOpen: !this.state.isOpen
+    })
   }
   editForm(){
-    //this.setState({isUpdateLoading : false })
     this.setState({isEdit : true})
   }
   editPage(){
     this.setState({isEdit : false})
-  }
-  UpdateFetch(){
-    var log = "";
-    this.setState({isUpdateLoading : true})
-    if(this.state.isDatePicketed || this.state.isEtheriumAccountChanged || this.state.isNameChanged || this.state.isPasswordChanged){
-      if(this.state.Name.length == 0  && this.state.date == this.state.userInfo.birthDate && this.state.Password.length == 0 && this.state.EtheriumAccount.length == 0){
-        this.editPage();
-        this.setState({isUpdateLoading : false}); 
-      }
-      if(!this.state.isEtheriumAccountChanged){
-        this.state.EtheriumAccount = this.state.userInfo.etheriumAccount;
-      }
-      if(!this.state.isNameChanged){
-        this.state.Name = this.state.userInfo.name;
-      }
-      if(!this.state.isDatePicketed){
-        this.state.date = this.state.userInfo.birthDate
-      }
-      if(this.state.EtheriumAccount.length > 0 && this.state.EtheriumAccount.length < 42){
-        if(log.length > 0)
-        log += '\netherium account number is not valid';
-        else
-        log += 'etherium account number is not valid';  
-      }
-      if(this.state.Password.length > 0 && this.state.Password.length < 6 && this.state.isPasswordChanged){
-        if(log.length > 0)
-        log += '\nPassword must be contain at least 6 charecters';
-        else
-        log += 'Password must be contain at least 6 charecters';
-      }
-      if(!this.state.Name.length > 0){
-        if(log.length > 0)
-        log += '\nname must not be empty';
-        else
-        log += 'name must not be empty';  
-      }
-      if(!log.length > 0){
-        fetch('https://sirin-app.herokuapp.com/user/change/info', {
-          method: 'POST',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body:JSON.stringify({
-                token : this.state.userInfo.token,
-                phone : this.state.userInfo.phone,
-                name : this.state.Name,
-                email : this.state.userInfo.email,
-                birthDate : this.state.date,
-                etheriumAccount : this.state.EtheriumAccount,
-                password : this.state.Password
-              })
-            }).then((response) => response.json()).then(async (responseJson) => {
-                console.log(responseJson);
-                if(responseJson.status == 'ok'){
-                  await AsyncStorage.clear();
-                  let age = parseInt((new Date() - new Date(responseJson.user.birthDate)) / 31536000000);
-                  var birthDate = responseJson.user.birthDate;
-                  birthDate = birthDate.split("",10).join("");
-                  let user = {
-                    email : responseJson.user.email,
-                    phone : responseJson.user.phone,
-                    birthDate : birthDate,
-                    name :  responseJson.user.name,
-                    token : responseJson.user.token,
-                    image : responseJson.user.userPhoto,
-                    etheriumAccount : responseJson.user.etheriumAccount,
-                    age : age
-                  }
-                  this.setState({userInfo : user});
-                  user = await JSON.stringify(user);
-                  AsyncStorage.setItem('@user_info',user).then(async()=>{
-                    console.log("user info added");
-                    console.log(user);
-                    this.setState({isUpdateLoading : false});
-                    await this.editPage();
-                    Alert.alert("SUCCESS!","your info updated successfully");
-                  });
-                }
-                else if(responseJson.status == 'error'){
-                  massagelog = '';
-                 for( var i = 0 ; i< responseJson.data.length ; i ++ ){
-                   massagelog += responseJson.data[i].msg;
-                 } 
-                  this.setState({isUpdateLoading : false});
-                  Alert.alert("ERROR!",massagelog);
-                }
-                else if(responseJson.status == 'token-error'){
-                  massagelog = '';
-                 for( var i = 0 ; i< responseJson.data.length ; i ++ ){
-                   massagelog += responseJson.data[i].msg;
-                 } 
-                  this.setState({isUpdateLoading : false});
-                  Alert.alert("ERROR!",massagelog);
-                }
-                else{
-                  this.setState({isUpdateLoading : false});
-                  Alert.alert("ERROR!",'somthing has went wrong plz try later');
-                }
-              }).catch((error) => {
-                  console.error(error);
-              });                
-            }
-      
-      
-      else{
-        this.setState({isUpdateLoading : false}); 
-        Alert.alert("ERROR!",log);
-      }
-    }
-    else{
-      this.setState({isUpdateLoading : false});
-      this.editPage();
-    }
-  }
-  SignOut(){
-    this.setState({isSignOutLoading : true});
-    fetch('https://sirin-app.herokuapp.com/user/logout', {
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({token : this.state.userInfo.token})
-        }).then((response) => response.json()).then(async(responseJson) => {
-          console.log(responseJson);
-          this.setState({isSignOutLoading : false});
-          if(responseJson.status == 'ok'){
-            await AsyncStorage.clear();
-            this.setState({userInfo : null});
-            this.props.navigation.navigate('Root');
-            console.log("deleted");
-          }
-          else{
-            console.log(responseJson);
-          }
-        }).catch((error) => {console.error(error)
-    });
   }
   get ProfileForm(){
     const {isFontLoaded} = this.state;
     const width = Dimensions.get('window').width
     const height = Dimensions.get('window').height
     if(this.state.isEdit){
-      if(this.state.isFontLoaded){
-        var font = 'Montserrat-Bold';
-      }
-      else{
-        var font = 'sans-serif';
-      }
-      if(this.state.isDatePicketed && this.state.userInfo){
-        var color = "#51a9ce";
-      }
-      if(!this.state.isDatePicketed && !this.state.userInfo){
-        var color = "rgba(195, 195, 198,0.8)"
-      }
-      if(this.state.isUpdateLoading){
-        var submitUpdateButton = <ActivityIndicator size={'large'} color={'#514a9d'}/>
-      }
-      else{
-        var submitUpdateButton = <TouchableOpacity onPress={this.UpdateFetch = this.UpdateFetch.bind(this)}>
-                    <LinearGradientButton width={window.width/5} detail={"done"} />
-              </TouchableOpacity>
-      }    
-      return(   
+      return(  
       <View style={{flex : 1}}>
         <View style={{flex : 10,justifyContent : 'center',alignItems : 'center'}}>
           <View style={[styles.toolbar,styles.formInfo,{flex : 2,justifyContent : 'center',alignItems : 'center'}]}>
-            <Text style={[{textAlign : 'left',paddingLeft : width/30,fontSize : width/28,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Name</Text>
-            <TextInput underlineColorAndroid={'transparent'} value={this.state.Name} onChangeText={(Name)=>{this.setState({Name,isNameChanged:true})}}  multiline={true} placeholderTextColor="#51a9ce" placeholder={this.state.userInfo.name} style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/30},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
+            <Text style={[{textAlign : 'left',paddingLeft : width/30,fontSize : width/28,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>name</Text>
+            <TextInput underlineColorAndroid={'transparent'} multiline={true} placeholderTextColor="#51a9ce" placeholder="milad asghari" style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/20},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
           </View>
           <View style={[styles.toolbar,styles.formInfo,{flex : 2,justifyContent : 'center',alignItems : 'center'}]}>
-              <Text style={[{textAlign : 'left',fontSize : width/30,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Phone number</Text>
-              <TextInput keyboardType={'phone-pad'} underlineColorAndroid={'transparent'} multiline={true} placeholderTextColor="#51a9ce" editable={false}  placeholder={this.state.userInfo.phone} style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/30},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
+              <Text style={[{textAlign : 'left',fontSize : width/28,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>phone number</Text>
+              <TextInput keyboardType={'phone-pad'} underlineColorAndroid={'transparent'} multiline={true} placeholderTextColor="#51a9ce" placeholder="+981111111111" style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/20},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
           </View>
           <View style={[styles.toolbar,styles.formInfo,{flex : 2,justifyContent : 'center',alignItems : 'center'}]}>
-              <Text style={[{textAlign : 'left',fontSize : width/30,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Email</Text>
-              <TextInput underlineColorAndroid={'transparent'} editable={false} multiline={true} placeholderTextColor="#51a9ce" placeholder={this.state.userInfo.email} style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/30},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
+              <Text style={[{textAlign : 'left',fontSize : width/28,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>email</Text>
+              <TextInput underlineColorAndroid={'transparent'} multiline={true} placeholderTextColor="#51a9ce" placeholder="miladasghari2016@gmail.com" style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/28},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
           </View>
           <View style={[styles.toolbar,styles.formInfo,{flex : 2,justifyContent : 'center',alignItems : 'flex-start'}]}>
-              <Text style={[{flex : 1,textAlign : 'left',fontSize : width/30,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Birthdate</Text>
-              {/* <MyDatePicker style={{textAlign : 'right',alignItems : 'flex-end'}} selectedColor={'#51a9ce'} fontSize={width*.031}/> */}
-              <DatePicker
-                    date={this.state.date}
-                    mode="date"
-                    placeholder="birthdate"
-                    format="YYYY-MM-DD"
-                    minDate="1500-05-01"
-                    maxDate="2017-06-01"
-                    confirmBtnText="Confirm"
-                    cancelBtnText="Cancel"
-                    customStyles={{
-                      dateIcon: {
-                        display : 'none',
-                      },
-                      dateText:{
-                        color : color || '#51a9ce',
-                        fontFamily : font,
-                        textAlign : 'right',
-                        fontSize : window.width/30,
-                        justifyContent: 'flex-end'
-                    },
-                      dateInput: {
-                        marginRight: 5,
-                        paddingLeft : 70,
-                        borderWidth : 0,
-                        marginTop : -5
-                      }
-                    }}
-                    onDateChange={(date)=> {
-                      this.setState({date,isDatePicketed : true})
-                    }}
-                  />
+              <Text style={[{flex : 1,textAlign : 'left',fontSize : width/28,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>birthday</Text>
+              <Text style={{color: 'blue'}}
+                 onPress={() => Linking.openURL('http://google.com')}>
+                 Google
+              </Text>
           </View>
           <View style={[styles.toolbar,styles.formInfo,{flex : 2,justifyContent : 'center',alignItems : 'center'}]}>
-              <Text style={[{textAlign : 'left',fontSize : width/30,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Password</Text>
-              <TextInput value={this.state.Password} secureTextEntry={false} onChangeText={(Password)=>{this.setState({Password,isPasswordChanged:true})}} underlineColorAndroid={'transparent'} multiline={true} placeholderTextColor="#51a9ce" placeholder="" style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/30},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
+              <Text style={[{textAlign : 'left',fontSize : width/28,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>password</Text>
+              <TextInput secureTextEntry={true} underlineColorAndroid={'transparent'} multiline={true} placeholderTextColor="#51a9ce" placeholder="" style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/20},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
           </View>
           <View style={[styles.toolbar,styles.formInfo,{flex : 2,justifyContent : 'center',alignItems : 'center'}]}>
-              <View style={{flex : 1}}>
-                <Text style={[{textAlign : 'left',fontSize : width/30,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Etherium account
-                </Text>
-              </View>
-              <View style={{flex : 1}}>
-                <TextInput secureTextEntry={false} onChangeText={(EtheriumAccount)=>{this.setState({EtheriumAccount,isEtheriumAccountChanged:true})}} underlineColorAndroid={'transparent'}  placeholderTextColor="#51a9ce" placeholder={this.state.userInfo.etheriumAccount} style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/30},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
-              </View>
+              <Text style={[{textAlign : 'left',fontSize : width/30,paddingLeft : width/30,paddingTop:10,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>repeat password
+              </Text>
+              <TextInput secureTextEntry={true} underlineColorAndroid={'transparent'} multiline={true} placeholderTextColor="#51a9ce" placeholder="" style={[{flex : 2,textAlign : 'right',paddingTop:5,paddingRight : width/30,color:'#51a9ce',fontSize : width/20},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}/>
           </View>
         </View>
         <View style={[styles.toolbar,{flex : 3}]}>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              {submitUpdateButton}
+              <TouchableOpacity onPress={this.editPage = this.editPage.bind(this)}>
+                    <LinearGradientButton width={window.width/5} detail={"done"} />
+              </TouchableOpacity>
             </View>
         </View>
       </View>  
       )
     }
     else{
-      if(this.state.isSignOutLoading){
-        var submitSignOutButton = <ActivityIndicator size={'large'} color={'#514a9d'}/>
-      }
-      else{
-        var submitSignOutButton = <TouchableOpacity onPress={this.SignOut = this.SignOut.bind(this)}>
-          <LinearGradientButton detail={"sign out"} />
-        </TouchableOpacity>
-      }
       return(     
         <View style={{flex : 1}}>
             <View style={{justifyContent : 'center',alignItems : 'center',flex : 3}}>
               <View style={[styles.toolbar,styles.formInfo,{flex : 1}]}>
-                  <Text style={[{flex : 1,textAlign : 'left',paddingLeft : width/30,fontSize : width/25,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Name</Text>
-                  <Text style={[{flex : 2,textAlign : 'right',paddingRight : width/30,fontSize : width/25,color:'#51a9ce'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>{this.state.userInfo.name}</Text>
+                  <Text style={[{flex : 1,textAlign : 'left',paddingLeft : width/30,fontSize : width/25,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>name</Text>
+                  <Text style={[{flex : 2,textAlign : 'right',paddingRight : width/30,fontSize : width/25,color:'#51a9ce'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Milad asghari</Text>
               </View>
               <View style={[styles.toolbar,styles.formInfo,{flex : 1}]}>
-                  <Text style={[{flex : 1,textAlign : 'left',paddingLeft : width/30,fontSize : width/25,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Phone number</Text>
-                  <Text style={[{flex : 1,textAlign : 'right',paddingRight : width/30,fontSize : width/25,color:'#51a9ce'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>{this.state.userInfo.phone}</Text>
+                  <Text style={[{flex : 1,textAlign : 'left',paddingLeft : width/30,fontSize : width/25,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>phone number</Text>
+                  <Text style={[{flex : 1,textAlign : 'right',paddingRight : width/30,fontSize : width/25,color:'#51a9ce'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>+989379640869</Text>
               </View>
               <View style={[styles.toolbar,styles.formInfo,{flex : 1}]}>
-                  <Text style={[{flex : 1,textAlign : 'left',paddingLeft : width/30,fontSize : width/25,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Email</Text>
-                  <Text style={[{flex : 4,textAlign : 'right',paddingRight : width/30,color:'#51a9ce',fontSize : width/30},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>{this.state.userInfo.email}</Text>
+                  <Text style={[{flex : 1,textAlign : 'left',paddingLeft : width/30,fontSize : width/25,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>email</Text>
+                  <Text style={[{flex : 4,textAlign : 'right',paddingRight : width/30,color:'#51a9ce',fontSize : width/25},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>miladasghari2016@gmail.com</Text>
               </View>
               <View style={[styles.toolbar,styles.formInfo,{flex : 1}]}>
-                  <Text style={[{flex : 1,textAlign : 'left',paddingLeft : width/30,fontSize : width/25,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>Birthday</Text>
-                  <Text style={[{flex : 2,textAlign : 'right',paddingRight : width/30,fontSize : width/25,color:'#51a9ce'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>{this.state.userInfo.birthDate}</Text>
-              </View>
+                  <Text style={[{flex : 1,textAlign : 'left',paddingLeft : width/30,fontSize : width/25,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>MyGithub</Text>
+                  <Text style={[{flex : 1,textAlign : 'right',paddingRight : width/30,color:'#51a9ce',fontSize : width/25},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}
+                 onPress={() => Linking.openURL('http://github.com/milad1367')}>
+                 github
+              </Text> 
+            </View>
+            <View style={[styles.toolbar,styles.formInfo,{flex : 1}]}>
+                  <Text style={[{flex : 1,textAlign : 'left',paddingLeft : width/30,fontSize : width/25,color:'#b3b3b3'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>MyLinkdin</Text>
+                  <Text style={[{flex : 1,textAlign : 'right',paddingRight : width/30,color:'#51a9ce',fontSize : width/25},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}
+                 onPress={() => Linking.openURL('http://www.linkedin.com/in/milad-asghari-67017b108')}>
+                 linkdin
+              </Text> 
+            </View>
             </View>  
-            <View style={{flex : 2,flexDirection : 'row'}}>
-            <View style={[styles.toolbar,{flex : 2,justifyContent : 'center',alignItems : 'center'}]}>
+            <View style={[styles.toolbar,{flex : 3,justifyContent : 'center',alignItems : 'center'}]}>
               <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <TouchableOpacity onPress={this.editForm = this.editForm.bind(this)}>
+                <TouchableOpacity>
                   <LinearGradientButton detail={"edit"} />
                 </TouchableOpacity>
               </View>
-            </View>
-            <View style={[styles.toolbar,{flex : 2,justifyContent : 'center',alignItems : 'center'}]}>
-              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                {submitSignOutButton}
-              </View>
-            </View>
             </View>
         </View>
       )
     }
   }
   render() {
-  const menuToolbar = ['menu','Profile','back'];
-  const text = "edit";
+    const menuToolbar = ['menu','Profile','back'];
+    const text = "edit";
+    const shadowOpt = {
+      width:150,
+      height:150,
+      color:'#aaa',
+      border:0,
+      radius:75,
+      opacity:0.1,
+      x:0,
+      y:-1,
+      style:{marginVertical:0}
+  }
   const {isFontLoaded} = this.state;
+  const menu = <Sidemenu onItemSelected={this.onMenuItemSelected} />;
   const window = Dimensions.get('window');
-  console.log(this.state);
     return (
-      this.state.userInfo && 
-      <View style={{flex : 1}}>
+      // <SideMenu
+      // isOpen={this.state.isOpen}
+      // onChange={this.onSideMenuChange.bind(this)}
+      // menu={menu}>
+      <View toggleSideMenu={this.toggleSideMenu.bind(this)} style={{flex : 1}}>
+          {/* <SideMenu/> */}
         <View style={{flex : 1}}>
           <ScrollView>
             <KeyboardAvoidingView behavior='position'>
-            <LinearGradient colors={['#514a9d','#24c6dc','#fcfdff','#f7f7f7','#fff']} style={{flexDirection : 'column',alignItems: 'stretch',flex:1,paddingTop : 30,paddingLeft:10,paddingRight:10,height : window.height , width : window.width}}>
+            <LinearGradient onTouchEnd={()=>{
+                          if(this.state.isOpen){
+                            Animated.timing(this.animatedPositionTop,{
+                              toValue : 0,
+                              duration : 300
+                            }).start();
+                            Animated.timing(this.animatedPositionLeft,{
+                              toValue : 0,
+                              duration : 300
+                            }).start();
+                            this.setState({borderColor : 'transparent',borderWidth : 0})
+                            this.setState({borderRadius : 0,top : 0,left : 0,isOpen : false});
+                          }
+                      }
+                  }
+            colors={['#514a9d','#24c6dc','#fcfdff','#f7f7f7','#fff']} style={{borderColor : this.state.borderColor,borderWidth : this.state.borderWidth,flexDirection : 'column',borderRadius : this.state.borderRadius,alignItems: 'stretch',flex:1,paddingTop : 30,paddingLeft:10,paddingRight:10,height : window.height , width : window.width}}>
               <Svg style={{zIndex : 0,position : 'absolute'}} width={window.width} height={window.height} viewBox="0 0 750 689">
                 <G  id="#f7f7f7ff">
                 <Path  fill="#f7f7f7" opacity="1.00" d=" M 411.40 0.00 L 442.54 0.00 C 472.09 1.32 501.73 2.46 531.01 6.98 C 546.48 8.80 561.80 11.68 577.15 14.29 C 601.84 19.78 626.44 25.82 650.56 33.48 C 656.65 35.36 662.62 37.60 668.77 39.32 C 696.31 49.81 724.09 60.01 750.00 74.20 L 750.00 347.90 C 748.31 364.21 749.05 380.63 749.04 397.00 C 749.01 401.76 749.73 406.48 750.00 411.24 L 750.00 513.80 C 749.90 518.51 749.58 523.22 749.19 527.92 C 748.58 539.92 749.67 551.99 748.24 563.95 C 747.87 573.00 747.95 582.07 748.16 591.13 C 748.80 596.84 749.79 602.51 750.00 608.28 L 750.00 689.00 L 127.30 689.00 C 124.21 688.90 121.13 688.70 118.05 688.46 C 112.28 687.92 106.53 688.90 100.77 689.00 L 14.32 689.00 C 11.73 688.15 8.46 686.42 6.23 689.00 L 0.00 689.00 L 0.00 93.99 L 1.91 94.01 C 1.72 93.60 1.34 92.80 1.14 92.40 C 11.10 89.61 20.56 85.37 30.18 81.65 C 35.49 79.88 40.82 78.10 46.01 75.96 C 55.44 72.80 64.84 69.55 74.21 66.20 C 152.10 39.59 232.23 18.90 313.91 8.09 C 322.98 7.34 331.89 5.29 341.01 4.97 C 357.59 3.10 374.27 2.12 390.92 1.00 C 397.76 1.03 404.63 1.21 411.40 0.00 Z" />
@@ -381,7 +216,8 @@ constructor () {
               <View style={styles.toolbar}>
                 <View style={styles.toolbarButton}>
                 <TouchableOpacity onPress={()=>{
-                  this.props.navigation.navigate('DrawerOpen')
+                  //this.props.navigation.navigate('DrawerOpen')
+                  this.onSideMenuChange(true);
                   }}>
                   <Svg width="56" height="31" viewBox="0 -10 67 55" version="1.1" xmlns="http://www.w3.org/2000/svg">
                     <G id="#82828282">
@@ -408,14 +244,15 @@ constructor () {
                 </View>
               </View>
                 <View style={[styles.toolbar,styles.imageContainer,{marginTop : window.width/20,marginBottom : window.width/20}]}>
-                    <Image source={{uri : this.state.userInfo.image}} style={[styles.profileImage,{width : window.width/2.5 , height : window.width/2.5}]}></Image> 
+                    <Image source={require('../imgs/me.png')} style={[styles.profileImage,{width : window.width/2.5 , height : window.width/2.5}]}></Image> 
                 </View>
                 {this.ProfileForm}  
             </LinearGradient>
             </KeyboardAvoidingView>
           </ScrollView>
         </View>
-      </View>  
+      </View> 
+      // </SideMenu> 
     );
   }
 }
@@ -449,12 +286,10 @@ const styles = StyleSheet.create({
   },
   toolbarTitle : {
     flex:1,
-    paddingRight : 20,
-    paddingVertical : 5,
     textAlign : 'center',
     fontSize : width/15,
+    alignSelf : 'center',
     color : '#fff',
-    justifyContent : 'center'
   }
 });
 export default Profile;
