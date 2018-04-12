@@ -27,6 +27,14 @@ run this project on your pc you must <a href="https://developers.google.com/fit/
 
 
 
-# instalation 
+# Quickstart
+
+frist you must edit app.json and edit package name.
+
+add your package name in app.json and google API console.
+
+The project dependencies are not included in this repository. To install all the dependencies you will need NPM. Run this command in the main directory:
+
+### npm install
 
 
