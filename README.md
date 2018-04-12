@@ -7,18 +7,19 @@ sirin is a fithness application that created with <a href="https://facebook.gith
 
 run this project on your pc you must <a href="https://developers.google.com/fit/android/get-api-key">create a api key </a> and add your project package in your api key.
 # demo
-<a href="http://miladasghari.com/projects/sirin/apk.zip" > download sirin apk </a>
+## <a href="http://miladasghari.com/projects/sirin/apk.zip" > download sirin apk </a>
+
 <p align="center">
   
-  <img src="http://miladasghari.com/projects/sirin/7.jpg" width="350"/>
-  <img src="http://miladasghari.com/projects/sirin/2.jpg" width="350"/>
+  <img src="http://miladasghari.com/projects/sirin/7.jpg" width="350" />
+  <img src="http://miladasghari.com/projects/sirin/2.jpg" width="350" />
 </p>
   <p align="center">
-  <img src="http://miladasghari.com/projects/sirin/5.jpg" width="350"/>
+  <img src="http://miladasghari.com/projects/sirin/5.jpg" width="350" margin-right="3em"/>
   <img src="http://miladasghari.com/projects/sirin/6.jpg" width="350"/>
 </P>
 <p align="center">
-  <img src="http://miladasghari.com/projects/sirin/3.jpg" width="350"/>
+  <img src="http://miladasghari.com/projects/sirin/3.jpg" width="350" margin-right="3em"/>
   <img src="http://miladasghari.com/projects/sirin/4.jpg" width="350"/>
 </p>
 
@@ -29,9 +30,10 @@ run this project on your pc you must <a href="https://developers.google.com/fit/
 
 # Quickstart
 
-frist you must edit app.json and edit package name.
+###### 1 - add your package name in app.json.
+###### 2 - <a href="https://developers.google.com/fit/android/get-api-key">create a api key </a> and add your package name in your project api key.
 
-add your package name in app.json and google API console.
+if you have any problems to get and create a signing certificate fingerprint please <a href="https://forums.expo.io/t/pedometer-fails-after-building-standalon-app/4470/3"> see here </a>
 
 The project dependencies are not included in this repository. To install all the dependencies you will need NPM. Run this command in the main directory:
 
