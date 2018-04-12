@@ -1,9 +1,8 @@
 # sirin
 
-sirin is a fithness application that created with <a href="https://facebook.github.io/react-native/"> react native </a> and <a href="https://github.com/reactjs/redux">redux </a>.
+Sirin is a fithness application and criptocurency base that created with <a href="https://facebook.github.io/react-native/"> react native </a> and <a href="https://github.com/reactjs/redux">redux </a>.
 
-#### sirin used google fit API for step counter.I created this project 6 months ago but I can not find sponsor for developing and improving of it.please install it and if you want, we can work together to develop and generate income.
-
+Sirin used google fit API for step counter but becuase of the creation of this app for criptocurrency, I created 4 anti hack method for while the client want to do bad jokes with the Sirin!  I created this project 6 months ago but I couldn't find any sponsor for developing and improving of it.please install it and if you want, we can work together to develop and generate income.
 # demo
 ## <a href="http://miladasghari.com/projects/sirin/apk.zip" > download sirin apk </a>
 
@@ -45,4 +44,11 @@ npm install
 ```bash
 npm start
 ```
+
+# request 
+If you could earn money with this app, you can donate bitcoin to me! :D :D 
+## bitcoin :182GGa89SkXj9XZt31kqJn4TdAuueadVCi
+<p align="center">
+<img src="http://miladasghari.com/projects/download.png" width="350" />
+</p>
 
