@@ -35,7 +35,7 @@ run this project on your pc you must <a href="https://developers.google.com/fit/
 
 if you have any problems to get and create a signing certificate fingerprint please <a href="https://forums.expo.io/t/pedometer-fails-after-building-standalon-app/4470/3"> see here </a>
 
-## Quickstart
+
 
 The project dependencies are not included in this repository. To install all the dependencies you will need NPM. Run this command in the main directory:
 
@@ -43,7 +43,6 @@ The project dependencies are not included in this repository. To install all the
 npm install
 ```
 
-Also run this to create bundle.js with browserify, it will update the file everytime you make a change in your JavaScript files.
 
 ```bash
 npm start
