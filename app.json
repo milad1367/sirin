@@ -1,0 +1,23 @@
+
+{
+  "expo": {
+   "name": "sirin",
+   "icon": "./src/imgs/icon.png",
+   "version": "1.0.0",
+   "slug": "sirin",
+   "sdkVersion": "20.0.0",
+   "orientation" : "portrait",
+   "loading" : {
+    "icon" :"./icon.png",
+    "backgroundColor" : "#aaa"
+   },
+   "ios": {
+     "bundleIdentifier": "com.example"
+   },
+   "android": {
+     "package": "com.example"
+   }
+
+   
+  }
+}
