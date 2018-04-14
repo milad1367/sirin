@@ -136,15 +136,10 @@ class History extends Component {
                             <Text style={[styles.toolbarTitle,{color : '#6571b1'},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}>coins</Text> 
                         </View>
                     </LinearGradient>)}
-
-                    
-                    
-                    
                     </ScrollView> 
                 </LinearGradient>
             </View>
-        </View>    
-        // </SideMenu>        
+        </View>     
     );
   }
 }
