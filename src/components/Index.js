@@ -23,9 +23,6 @@ import MainPageStates from '../containers/MainPageStates';
 import DrawerOption from './DrawerOption';
 import DrawerOptionForLoggedApps from './DrawerOptionForLoggedApps';
 const reactNative = require('react-native');
-
-
-
 class  Index extends Component{
   state = {
     userInfo : false
@@ -34,7 +31,6 @@ class  Index extends Component{
      await reactNative.I18nManager.allowRTL(false);
     
   }
-
   componentWillMount(){
     AsyncStorage.getItem('@user_info').then((value)=>{
       if(value){
@@ -44,31 +40,16 @@ class  Index extends Component{
         this.setState({userInfo : false});
       }
     });
-
-
   }
   render(){
-    
-   //   if(this.state.userInfo){
-        return(
+      return(
         <View style={styles.container}>
           <GetPedometer />
           <MyLocation />
           <AntiHack />
           <DrawerOptionForLoggedApps/>
         </View>
-        )
-     // }
-      /*
-      else{
-        return(
-          <View style={styles.container}>
-
-            <DrawerOption/>
-          </View>
-        )
-    }
-    */
+      )
   } 
 }
 export default Index
