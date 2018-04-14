@@ -39,8 +39,6 @@ const colours = {
     blue: '#24c6dc',
     brown: '#24c6dc'
 }
-
-// create the barchart (http://bl.ocks.org/mbostock/3885304)
 const data = [
     {frequency: 600, letter: 'Oct 01'},
     {frequency: 1400, letter: 'Oct 02' },
@@ -120,8 +118,6 @@ class BarChart extends Component {
                             {
                                 data.map((d, i) => (
                                     <G key={i + 1} translate={x(d.letter) + labelDx + ",0"}>                                   
-                                        {/* <Line fill={colours.black} stroke={colours.black} x={0} y={notch}/> */}
-                                        {/* <Text fill={colours.black} >Oct</Text> */}
                                         <G x={-20}>
                                             <Text fontFamily='Montserrat' style={{textAlign : 'left',fontSize : 2}} fill={colours.black} x={-7} y={labelDistance - 25}>{d.letter}</Text>
                                         </G>
