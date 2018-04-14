@@ -53,8 +53,6 @@ export default class CircularProgressBar extends Component {
 
     get CircularCalc(){
         const {isFontLoaded} = this.state;
-    //    console.log(this.state);
-    //    console.log(this.props.coins);
         const window = Dimensions.get('window');
         if(this.props.progressSteps >= 0){
             return(
@@ -64,18 +62,12 @@ export default class CircularProgressBar extends Component {
         if(this.props.progressCoin >=0){
             return(
                 <Text style={[{color:'white',fontSize:Math.round(window.height/40),textAlign :"center"},isFontLoaded && {fontFamily : 'Montserrat-Bold'}]}> Remain to get {"\n"} Your share </Text>
-                // {Number((this.state.progressCoin).toFixed(1))*10*5}
             )
         }
     }
     render(){
         const {isFontLoaded} = this.state;
-        // console.log(this.props.details)
         const window = Dimensions.get('window');
-      //  console.log("this.state"+this.state.progressSteps);
-      //  console.log("this.props"+this.props.progressSteps);
-        // this.setState({progressSteps : this.props.progressSteps})
-        // console.log(this.state)
         return(
             <View style={{alignItems : 'center',flex:1}}>
                 <Progress.Circle
