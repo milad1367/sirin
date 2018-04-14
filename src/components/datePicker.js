@@ -3,24 +3,14 @@ import DatePicker from 'react-native-datepicker'
 import { Font } from 'expo';
 import { connect } from 'react-redux';
 import {DateValue} from '../actions';
-
-
 let createHandlers = function(dispatch) {
   let DataPicker = function( data) {
     dispatch(DateValue(data))
   };
-
   return {
     DataPicker,
-    // other handlers
   };
 }
-
-
-
-
-
-
 class MyDatePicker extends Component {
   constructor(props){
     super(props)
@@ -37,7 +27,6 @@ class MyDatePicker extends Component {
     }).then(()=>{
       this.setState({isFontLoaded : true});
     });
-   // this.props.dispatch(DateValue("ddddddddddddddd"));
   }
   render(){
     console.log(this.state.date);
@@ -82,7 +71,6 @@ class MyDatePicker extends Component {
             paddingLeft : 50,
             borderWidth : 0,
           }
-          // ... You can check the source to find the other keys. 
         }}
         onDateChange={(date)=> {
           this.setState({date,isDatePicketed : true})
