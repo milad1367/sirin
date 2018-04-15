@@ -165,12 +165,7 @@ constructor () {
   const menu = <Sidemenu onItemSelected={this.onMenuItemSelected} />;
   const window = Dimensions.get('window');
     return (
-      // <SideMenu
-      // isOpen={this.state.isOpen}
-      // onChange={this.onSideMenuChange.bind(this)}
-      // menu={menu}>
       <View style={{flex : 1}}>
-          {/* <SideMenu/> */}
         <View style={{flex : 1}}>
           <ScrollView>
             <KeyboardAvoidingView behavior='position'>
@@ -202,7 +197,6 @@ constructor () {
                 <View style={styles.toolbarButton}>
                 <TouchableOpacity onPress={()=>{
                   this.props.navigation.navigate('DrawerOpen')
-                  //this.onSideMenuChange(true);
                   }}>
                   <Svg width="56" height="31" viewBox="0 -10 67 55" version="1.1" xmlns="http://www.w3.org/2000/svg">
                     <G id="#82828282">
@@ -237,7 +231,6 @@ constructor () {
           </ScrollView>
         </View>
       </View> 
-      // </SideMenu> 
     );
   }
 }
