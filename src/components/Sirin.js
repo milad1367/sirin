@@ -11,7 +11,7 @@ import { Pedometer } from "expo";
   render() {
     this.props.dispatch(giveSteps("25"));
    return(
-     <Text>aaaaaaaaaaa</Text>
+     <Text>sirin</Text>
    )
   }
 }

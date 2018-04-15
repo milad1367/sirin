@@ -142,47 +142,12 @@ class Start extends Component {
   }
   _LoginForm(){
     const { navigate } = this.props.navigation;
-    navigate('MainPageStates');
-/*
-    const window = Dimensions.get('window');
-    var handleLogin = InteractionManager.createInteractionHandle();
-    this.setState({sliderPosition : window.height*0.05});
-    InteractionManager.runAfterInteractions(() => {
-      Animated.timing(this.animatedPositionTop,{
-        toValue : window.height*.3,
-        duration : 800
-      }).start();
-      Animated.timing(this.animatedOpacityLogin,{
-        toValue : 1,
-        duration : 1500,
-        useNativeDriver : true
-      }).start();
-    });
-    InteractionManager.clearInteractionHandle(handleLogin);
-    this.setState({colors : ['#514a9d','#24c6dc',"#fff"],loginForm : true , SignUpForm : false,SliderStyle : false,forgotForm:false})
-  */  
+    navigate('MainPageStates'); 
   }
   _SignUpForm(){
 
     const { navigate } = this.props.navigation;
     navigate('MainPageStates');
-/*
-    const window = Dimensions.get('window');
-    var handleSignUp = InteractionManager.createInteractionHandle();
-    InteractionManager.runAfterInteractions(() => {
-      this.setState({sliderPosition : window.height*0.10});
-      Animated.timing(this.animatedPositionTop,{
-        toValue : window.height*.18,
-        duration : 800
-      }).start();
-      Animated.timing(this.animatedOpacitySignUp,{
-        toValue : 1,
-        duration : 1500
-      }).start();
-    });
-    InteractionManager.clearInteractionHandle(handleSignUp);
-    this.setState({SliderStyle : false,colors : ['#514a9d','#24c6dc',"#fff","#fff"],loginForm : false , SignUpForm : true,forgotForm:false})
-    */
   }
   LoginFetch(){
     const { navigate } = this.props.navigation;
@@ -213,7 +178,6 @@ class Start extends Component {
           }).then((response) => response.json()).then(async(responseJson) => {
             if(responseJson.status == 'ok'){
               let age = parseInt((new Date() - new Date(responseJson.data.birthDate)) / 31536000000);
-              //console.log(responseJson.data);
               var birthDate = responseJson.data.birthDate;
               birthDate = birthDate.split("",10).join("");
               let user = {
@@ -439,15 +403,16 @@ class Start extends Component {
         var submitLoginButtion = <ActivityIndicator size={'large'} color={'#514a9d'}/>
       }
       else{
-        var submitLoginButtion = <TouchableOpacity disabled={this.state.passwordLogin.length <=0 || this.state.phoneNumberLogin.length <= 0} style={[{flex : 1}]} onPress={this.LoginFetch.bind(this)}>
-        <LinearGradientButton width={window.width / 4}  detail="Login"/>
-      </TouchableOpacity>
+        var submitLoginButtion =
+        <TouchableOpacity disabled={this.state.passwordLogin.length <=0 || this.state.phoneNumberLogin.length <= 0} style={[{flex : 1}]} onPress={this.LoginFetch.bind(this)}>
+          <LinearGradientButton width={window.width / 4}  detail="Login"/>
+        </TouchableOpacity>
       }    
       return(
         <Animated.View style={[styles.formContent,{flex : 1.5,opacity : this.animatedOpacityLogin,justifyContent : 'center',alignItems : 'center'}]}>
-         <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
+          <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
             <Text style={[{fontSize : window.width*.08,color : '#514a9d'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>Welcome Back</Text>
-         </View>
+          </View>
           <View style={{flex : 3,alignItems : 'center',justifyContent : 'center',alignItems : 'center'}}>
             <View style={{flex : 1 , flexDirection : 'row',width : window.width - 30,marginLeft : 5}}>
                 <View style={{flex : 1,justifyContent : 'center',marginBottom : -6,marginTop : 15}}>
@@ -501,22 +466,22 @@ class Start extends Component {
       }    
       return(
         <Animated.View style={[styles.formContent,{flex : 1,opacity : this.animatedOpacityLogin,justifyContent : 'center',alignItems : 'center'}]}>
-        <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
-           <Text style={[{fontSize : window.width*.06,color : '#514a9d'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>Plz Enter Your Email</Text>
-        </View>
-         <View style={{flex : 1,alignItems : 'center',justifyContent : 'center',alignItems : 'center'}}>
-           <View style={{flex : 1}}>
-           <TextInput  underlineColorAndroid={'#24c6dc'} placeholder={'email'} value={this.state.emailForgot} onChangeText={(emailForgot)=>{this.setState({emailForgot})}} style={[{color:'#908cbb',width : window.width - 30,padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
-           </View>
-         </View>
-         <View style={{flex : 2,justifyContent : 'center',alignItems : 'center',opacity : buttonOpacity}}>
-           {submitForgotButtion}
-         </View>
-         <View style={{flex : 1,justifyContent : 'center'}}>
-            <TouchableOpacity style={[{flex : 1}]} onPress={this._LoginForm = this._LoginForm.bind(this)}>
-              <Text style={[{fontSize : window.width*.025,color : '#514a9d',textAlign : 'center'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>didn't forget your password ? </Text>
-            </TouchableOpacity>  
-         </View>
+          <View style={{flex : 1,justifyContent : 'center',alignItems : 'center'}}>
+            <Text style={[{fontSize : window.width*.06,color : '#514a9d'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>Plz Enter Your Email</Text>
+          </View>
+          <View style={{flex : 1,alignItems : 'center',justifyContent : 'center',alignItems : 'center'}}>
+            <View style={{flex : 1}}>
+            <TextInput  underlineColorAndroid={'#24c6dc'} placeholder={'email'} value={this.state.emailForgot} onChangeText={(emailForgot)=>{this.setState({emailForgot})}} style={[{color:'#908cbb',width : window.width - 30,padding : 10},isFontLoaded && {fontFamily:'Montserrat-Light'}]}/>
+            </View>
+          </View>
+          <View style={{flex : 2,justifyContent : 'center',alignItems : 'center',opacity : buttonOpacity}}>
+            {submitForgotButtion}
+          </View>
+          <View style={{flex : 1,justifyContent : 'center'}}>
+              <TouchableOpacity style={[{flex : 1}]} onPress={this._LoginForm = this._LoginForm.bind(this)}>
+                <Text style={[{fontSize : window.width*.025,color : '#514a9d',textAlign : 'center'},isFontLoaded && {fontFamily:'Montserrat-Light'}]}>didn't forget your password ? </Text>
+              </TouchableOpacity>  
+          </View>
        </Animated.View>
       )
     }
