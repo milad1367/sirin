@@ -15,7 +15,6 @@ export default class LinearGradientButton extends Component {
     });
   }
   render() {
-   // console.log(this.props);
     const window= Dimensions.get('window');
     const{isfontLoaded} = this.state;
     if(Platform.OS === 'ios'){

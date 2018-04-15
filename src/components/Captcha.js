@@ -31,7 +31,6 @@ export default class Captcha extends Component {
       await this.setState({isVisible : false});
     }
     else{
-      console.log("this is false");
       await this.setState({isVisible : false});
     }
     return ;
