@@ -10,12 +10,6 @@ import AntiMethod4 from './AntiMethod4';
 
 class AntiHack extends React.Component {
 
-
-  componentDidMount(){
-  
-  }
-
-
   shouldComponentUpdate(nextProps, nextState) {
 
     if (nextProps.gps && this.props.gps ) {
@@ -30,7 +24,6 @@ class AntiHack extends React.Component {
 
     }
     if ( ((nextProps.steps - nextProps.FinalSteps.PedoSteps) >=100) && this.props.StartPos && nextProps.session.start ) {
-       console.log("if on method2");
        let steps = nextProps.steps - nextProps.FinalSteps.PedoSteps;
        let startPos = this.props.StartPos;
        let endPos;
@@ -40,14 +33,8 @@ class AntiHack extends React.Component {
        else {
          endPos = nextProps.gps;
        }
-       console.log("endPos method2 : ");
-       console.log(endPos );
-       console.log( this.props.gps);
-       console.log("nextProps.gps : "); 
-       console.log(nextProps.gps);
         this.props.dispatch(setPedoSteps(nextProps.steps));
        if ( AntiMethod2(steps,startPos,endPos )) {
-          console.log("real steps is set on antimethod2");
           this.props.dispatch(setRealSteps(steps));
           this.props.dispatch(GetStartPos(this.props.gps));
        }
@@ -55,7 +42,6 @@ class AntiHack extends React.Component {
        this.props.dispatch(GetStartPos(this.props.gps));
        }
     }
-
     return true
   }
 
@@ -67,10 +53,8 @@ class AntiHack extends React.Component {
          
     }
     if ( ( this.props.steps > 0) && ( this.props.steps == nextProps.steps ) && nextProps.session.start && SpeedNorm("walk","end",nextProps.gps.coords.speed ) ) {
-          console.log("i am in steps checker!" );
           this.props.dispatch(SetSession("end"));
-          this.props.dispatch(GetEndPos(nextProps.gps));
-          
+          this.props.dispatch(GetEndPos(nextProps.gps));   
     }
  
   }
@@ -87,32 +71,10 @@ class AntiHack extends React.Component {
 
     
     return(
-      /*
-    <View>
-      
-      <Text> distance: {this.distance} </Text>
-      <Text> steps: {this.props.steps} </Text>
-      <Text> startpos: {StartPos} </Text>
-      <Text> endpos: {EndPos} </Text>
-      <Text> RealSteps: {this.props.FinalSteps.RealSteps} </Text>
-     
-      
-    </View>
-*/
-false
+      false
     )
   }
 }
-
-
-
-
-AntiHack.PropTypes = {
-  
-}
-  
-
-
 const mapStateToProps = state => ({
   gps:state.Gps,
   steps:state.steps,
@@ -122,16 +84,9 @@ const mapStateToProps = state => ({
   stepsChecker:state.StepsChecker,
   FinalSteps:state.FinalSteps,
 })
-
-
-
-  export default connect(mapStateToProps)(AntiHack);
-
-
-
+export default connect(mapStateToProps)(AntiHack);
 
 const SpeedNorm = (  which , pos , speed  ) => {
-
 const walk = {
    MinSpeed:-1,
    MaxSpeed:4
@@ -157,7 +112,6 @@ const walk = {
  }
 
 }
-console.log("bad code in speed norm const!");
  return false
 
 }
