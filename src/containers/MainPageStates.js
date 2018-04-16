@@ -9,7 +9,6 @@ import MyLocation from './MyLocation';
 import AntiHack from './AntiHack';
 
 mapStateToProps = ( state ) => ({
-   // ProgressSteps : state.FinalSteps.RealSteps
    ProgressSteps : state.steps
 })
  const MainPageStates = connect(
