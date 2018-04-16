@@ -17,12 +17,12 @@ import Svg,{
     Defs,
     Stop
   } from 'react-native-svg';
-const { height, width } = Dimensions.get('window');
-var slideWidth = width*.9;
+    const { height, width } = Dimensions.get('window');
+    var slideWidth = width*.9;
 
-const sliderWidth = Dimensions.get('window').width;
-var itemWidth = slideWidth ;
-const itemHeight = height*.25;    
+    const sliderWidth = Dimensions.get('window').width;
+    var itemWidth = slideWidth ;
+    const itemHeight = height*.25;    
 const data = [
     {
         title : "Far far away, behind the word mountains,  there live the blind texts.",
@@ -123,7 +123,6 @@ export default class Slider extends Component {
             'Montserrat-Bold': require('../assets/fonts/MontserratAlternates-Bold.ttf'),
             'Montserrat-Light' : require('../assets/fonts/MontserratAlternates-Regular.ttf'),
           });
-     //   console.log(this.state)
     }
     _renderItem = ({item, index}) => {
         if(this.props.text == false){
@@ -170,7 +169,6 @@ export default class Slider extends Component {
                   backgroundColor: 'rgba(255, 255, 255, 0.92)'
               }}
               inactiveDotStyle={{
-                  // Define styles for inactive dots here
               }}
               inactiveDotOpacity={0.4}
               inactiveDotScale={0.6}
