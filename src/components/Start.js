@@ -581,7 +581,6 @@ class Start extends Component {
                     }}
                   />
               </View>
-                {/* <DatePickerAndroid/> */}
               <View style={{borderTopColor : '#24c6dc',borderTopWidth : 0.8}}>
                 <Text style={{color : 'transparent',width : window.width - 30}}>This is UnderLine</Text>
               </View>
