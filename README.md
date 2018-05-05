@@ -3,7 +3,7 @@ Sirin is a fitness application and cryptocurrency base that created with <a href
 
 Sirin used google fit API for step counter but becuase of the creation of this app for criptocurrency, I created 4 anti hack method for while the client want to do bad indulge with the Sirin!  I created this project 6 months ago but I couldn't find any sponsor for developing and improving of it.please install it and if you want, we can work together to develop and generate income.
 # demo
-## <a href="https://www.dropbox.com/s/id48phr8bd2ueht/android%252F%40milad1367%252Fsirin-2fe31a65-3d73-11e8-8cce-0a580a78210f-signed%20%281%29.apk?dl=0" > download sirin apk </a>
+## <a href="http://miladasghari.com/projects/sirin/apk.zip" > download sirin apk </a>
 <p align="center">
   
   <img src="http://miladasghari.com/projects/sirin/7.jpg" width="350" />
