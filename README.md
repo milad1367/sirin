@@ -1,7 +1,7 @@
 # sirin
 Sirin is a fitness application and cryptocurrency base that created with <a href="https://facebook.github.io/react-native/"> react native </a> and <a href="https://github.com/reactjs/redux">redux </a>.
 
-Sirin used google fit API for step counter but becuase of the creation of this app for criptocurrency, I created 4 anti hack method for while the client want to do bad indulge with the Sirin!  I created this project 6 months ago but I couldn't find any sponsor for developing and improving of it.please install it and if you want, we can work together to develop and generate income.
+Sirin used google fit API for step counter but becuase of the creation of this app for criptocurrency, I created 4 anti hack method for while the client want to do bad indulge with the Sirin!.please install it and if you want, we can work together to develop and generate income. :D
 # demo
 ## <a href="http://miladasghari.com/projects/sirin/Sirin.apk" > download sirin apk </a>
 <p align="center">
